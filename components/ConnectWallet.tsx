@@ -39,7 +39,7 @@ export default function ConnectWallet() {
     }
 
     return (
-        <div className="relative z-50" ref={menuRef}>
+        <div className="relative z-40" ref={menuRef}>
             <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className="px-4 py-2 rounded-xl bg-dark-blue/40 hover:bg-dark-blue/60 transition-all duration-300 border border-white/5 hover:border-primary/30"
@@ -51,7 +51,7 @@ export default function ConnectWallet() {
             </button>
 
             {isMenuOpen && (
-                <div className="absolute right-0 mt-2 w-72 rounded-xl bg-dark-blue/95 border border-white/10 shadow-xl backdrop-blur-xl p-4 space-y-4 z-[60]">
+                <div className="absolute right-0 mt-2 w-72 rounded-xl bg-dark-blue/95 border border-white/10 shadow-xl backdrop-blur-xl p-4 space-y-4 z-50">
                     <div className="space-y-2">
                         <div className="text-sm text-gray-400">Account</div>
                         <div className="flex items-center justify-between">

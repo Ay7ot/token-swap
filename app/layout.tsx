@@ -32,7 +32,7 @@ export default function RootLayout({
       >
         <WalletProvider>
           {children}
-          <Toaster 
+          <Toaster
             position="bottom-right"
             toastOptions={{
               duration: 5000,

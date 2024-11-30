@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { TokenData } from '@/types/token';
 import { useWallet } from '@/contexts/WalletContext';
 import { executeSwap, SwapError } from '@/utils/swap';
@@ -27,6 +27,17 @@ export default function SwapButton({
   const { isConnected, provider } = useWallet();
   const [isSwapping, setIsSwapping] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Clear error after 10 seconds
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError(null);
+      }, 10000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
 
   const handleSwap = async () => {
     if (!provider || !fromAmount || !toAmount) return;
@@ -60,10 +71,8 @@ export default function SwapButton({
         </div>
       );
     } catch (error) {
-      // Safely handle the error
       const swapError = error instanceof SwapError ? error : new SwapError('Unknown error occurred');
       
-      // Only log non-user-rejected errors
       if (swapError.code !== 'ACTION_REJECTED') {
         console.warn('Swap failed:', {
           message: swapError.message,

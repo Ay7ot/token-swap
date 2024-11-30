@@ -19,12 +19,57 @@ export default {
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-primary": "linear-gradient(to right, #4F46E5, #7C3AED)",
-        "gradient-dark": "linear-gradient(to bottom, #0F172A, #1E293B)",
+        "gradient-dark": `
+          radial-gradient(circle at top left, rgba(79, 70, 229, 0.15) 0%, transparent 40%),
+          radial-gradient(circle at top right, rgba(124, 58, 237, 0.15) 0%, transparent 40%),
+          radial-gradient(circle at bottom left, rgba(79, 70, 229, 0.1) 0%, transparent 40%),
+          radial-gradient(circle at bottom right, rgba(124, 58, 237, 0.1) 0%, transparent 40%),
+          linear-gradient(to bottom, #0F172A, #1E293B)
+        `,
       },
       boxShadow: {
         'glow': '0 0 20px rgba(124, 58, 237, 0.5)',
       },
+      animation: {
+        'gradient-x': 'gradient-x 15s ease infinite',
+        'gradient-y': 'gradient-y 15s ease infinite',
+        'gradient-xy': 'gradient-xy 15s ease infinite',
+      },
+      keyframes: {
+        'gradient-y': {
+          '0%, 100%': {
+            'background-size': '400% 400%',
+            'background-position': 'center top'
+          },
+          '50%': {
+            'background-size': '200% 200%',
+            'background-position': 'center center'
+          }
+        },
+        'gradient-x': {
+          '0%, 100%': {
+            'background-size': '200% 200%',
+            'background-position': 'left center'
+          },
+          '50%': {
+            'background-size': '200% 200%',
+            'background-position': 'right center'
+          }
+        },
+        'gradient-xy': {
+          '0%, 100%': {
+            'background-size': '400% 400%',
+            'background-position': 'left center'
+          },
+          '50%': {
+            'background-size': '200% 200%',
+            'background-position': 'right center'
+          }
+        }
+      }
     },
   },
   plugins: [],
 } satisfies Config;
+
+
