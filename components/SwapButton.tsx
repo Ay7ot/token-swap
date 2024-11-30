@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react';
 import { TokenData } from '@/types/token';
 import { useWallet } from '@/contexts/WalletContext';
+import { useToast } from '@/contexts/ToastContext';
 import { executeSwap, SwapError } from '@/utils/swap';
 import { getReadableError } from '@/utils/errorHandling';
-import toast from 'react-hot-toast';
 
 interface SwapButtonProps {
   fromToken: TokenData;
@@ -25,6 +25,7 @@ export default function SwapButton({
   onSuccess
 }: SwapButtonProps) {
   const { isConnected, provider } = useWallet();
+  const { showToast } = useToast();
   const [isSwapping, setIsSwapping] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -51,13 +52,13 @@ export default function SwapButton({
         toToken,
         fromAmount,
         toAmount,
-        1, // 1% slippage
+        1,
         provider
       );
       
       onSuccess?.(txHash);
       
-      toast.success(
+      showToast(
         <div className="flex flex-col gap-2">
           <div>Swap successful!</div>
           <a 
@@ -68,7 +69,8 @@ export default function SwapButton({
           >
             View on Etherscan ↗
           </a>
-        </div>
+        </div>,
+        'success'
       );
     } catch (error) {
       const swapError = error instanceof SwapError ? error : new SwapError('Unknown error occurred');
@@ -83,7 +85,7 @@ export default function SwapButton({
 
       const readableError = getReadableError(swapError);
       setError(readableError);
-      toast.error(readableError);
+      showToast(readableError, 'error');
     } finally {
       setIsSwapping(false);
     }
