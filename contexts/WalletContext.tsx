@@ -53,7 +53,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
             setChainId(network.chainId);
             setBalance(ethers.utils.formatEther(accountBalance));
         } catch (error) {
-            console.error('Connection error:', error);
+            console.error('Connection error here:', error);
         } finally {
             setIsConnecting(false);
         }
