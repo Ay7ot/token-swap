@@ -12,7 +12,6 @@ interface TokenSelectProps {
   onTokenSelect: (token: TokenData) => void;
   amount: string;
   onAmountChange: (amount: string) => void;
-  otherAmount: string;
   hasInsufficientBalance?: boolean;
 }
 
@@ -22,7 +21,6 @@ export default function TokenSelect({
   onTokenSelect,
   amount,
   onAmountChange,
-  otherAmount,
   hasInsufficientBalance
 }: TokenSelectProps) {
   const [isSelectOpen, setIsSelectOpen] = useState(false);

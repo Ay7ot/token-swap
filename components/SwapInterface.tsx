@@ -22,7 +22,10 @@ export default function SwapInterface() {
     // Fetch and update balance when token or address changes
     useEffect(() => {
         const updateBalance = async () => {
-            if (!isConnected || !address || !provider || !fromToken) return;
+            if (!isConnected || !address || !provider || !fromToken) {
+                setBalance('0');
+                return;
+            }
             const newBalance = await getTokenBalance(fromToken.address, address, provider);
             setBalance(newBalance);
         };
@@ -45,11 +48,17 @@ export default function SwapInterface() {
 
     useEffect(() => {
         const updatePrice = async () => {
-            if (!provider || !fromToken || !toToken) return;
+            if (!provider || !fromToken || !toToken) {
+                return;
+            }
 
             const amount = activeInput === 'from' ? fromAmount : toAmount;
             if (!amount || parseFloat(amount) === 0) {
-                activeInput === 'from' ? setToAmount('') : setFromAmount('');
+                if (activeInput === 'from') {
+                    setToAmount('');
+                } else {
+                    setFromAmount('');
+                }
                 return;
             }
 
@@ -125,7 +134,6 @@ export default function SwapInterface() {
                         onTokenSelect={setFromToken}
                         amount={fromAmount}
                         onAmountChange={handleFromAmountChange}
-                        otherAmount={toAmount}
                         hasInsufficientBalance={hasInsufficientBalance}
                     />
 
@@ -152,7 +160,6 @@ export default function SwapInterface() {
                         onTokenSelect={setToToken}
                         amount={toAmount}
                         onAmountChange={handleToAmountChange}
-                        otherAmount={fromAmount}
                     />
 
                     <SwapButton
