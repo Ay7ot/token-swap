@@ -102,26 +102,26 @@ export default function SwapInterface() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-dark p-4 flex flex-col items-center justify-center relative overflow-hidden">
+        <div className="min-h-screen bg-gradient-dark px-4 py-6 sm:p-4 flex flex-col items-center justify-center relative overflow-hidden">
             {/* Decorative elements */}
             <div className="absolute inset-0 overflow-hidden">
-                {/* Animated gradient orbs */}
-                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary/20 blur-[100px] animate-gradient-xy" />
-                <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-secondary/20 blur-[100px] animate-gradient-xy" />
-                <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-secondary/20 blur-[100px] animate-gradient-xy" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-primary/20 blur-[100px] animate-gradient-xy" />
+                {/* Animated gradient orbs - reduced size on mobile */}
+                <div className="absolute top-[-5%] left-[-5%] w-[30%] sm:w-[40%] h-[30%] sm:h-[40%] rounded-full bg-primary/20 blur-[100px] animate-gradient-xy" />
+                <div className="absolute top-[-5%] right-[-5%] w-[30%] sm:w-[40%] h-[30%] sm:h-[40%] rounded-full bg-secondary/20 blur-[100px] animate-gradient-xy" />
+                <div className="absolute bottom-[-5%] left-[-5%] w-[30%] sm:w-[40%] h-[30%] sm:h-[40%] rounded-full bg-secondary/20 blur-[100px] animate-gradient-xy" />
+                <div className="absolute bottom-[-5%] right-[-5%] w-[30%] sm:w-[40%] h-[30%] sm:h-[40%] rounded-full bg-primary/20 blur-[100px] animate-gradient-xy" />
 
                 {/* Grid pattern */}
                 <div
-                    className="absolute inset-0 bg-[linear-gradient(to_right,#4F46E5/2_1px,transparent_1px),linear-gradient(to_bottom,#4F46E5/2_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000,transparent)]"
+                    className="absolute inset-0 bg-[linear-gradient(to_right,#4F46E5/2_1px,transparent_1px),linear-gradient(to_bottom,#4F46E5/2_1px,transparent_1px)] bg-[size:2rem_2rem] sm:bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000,transparent)]"
                     style={{ opacity: 0.1 }}
                 />
             </div>
 
             {/* Main content */}
-            <div className="relative z-10 bg-dark-blue/20 backdrop-blur-xl rounded-3xl p-6 w-full max-w-md border border-white/10 shadow-xl">
-                <div className="flex justify-between items-center mb-6">
-                    <h1 className="text-2xl font-bold bg-gradient-primary text-transparent bg-clip-text">
+            <div className="relative z-10 bg-dark-blue/20 backdrop-blur-xl rounded-3xl p-4 sm:p-6 w-full max-w-md border border-white/10 shadow-xl">
+                <div className="flex justify-between items-center mb-4 sm:mb-6">
+                    <h1 className="text-xl sm:text-2xl font-bold bg-gradient-primary text-transparent bg-clip-text">
                         Swap Tokens
                     </h1>
                     <ConnectWallet />

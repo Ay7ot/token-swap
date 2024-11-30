@@ -76,28 +76,28 @@ export default function TokenSelect({
 
   return (
     <div className="relative">
-      <div className={`p-4 rounded-xl bg-dark-blue/20 backdrop-blur-md border transition-all duration-300 
+      <div className={`p-3 sm:p-4 rounded-xl bg-dark-blue/20 backdrop-blur-md border transition-all duration-300 
         ${hasInsufficientBalance 
           ? 'border-red-500/50 hover:border-red-500/70' 
           : 'border-white/10 hover:border-primary/30'}`}
       >
         <div className="flex justify-between items-center mb-2">
-          <span className="text-sm text-gray-400">
+          <span className="text-xs sm:text-sm text-gray-400">
             {direction === 'from' ? 'You pay' : 'You receive'}
           </span>
           {direction === 'from' && isConnected && (
-            <span className={`text-sm ${hasInsufficientBalance ? 'text-red-400' : 'text-gray-400'}`}>
-              Balance: {formatBalance(tokenBalances[selectedToken.address] || '0')} {selectedToken.symbol}
+            <span className={`text-xs sm:text-sm ${hasInsufficientBalance ? 'text-red-400' : 'text-gray-400'}`}>
+              Balance: {formatBalance(tokenBalances[selectedToken.address] || '0')}
             </span>
           )}
         </div>
         
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <button 
             onClick={() => setIsSelectOpen(true)}
-            className="flex items-center gap-2 px-3 py-2 rounded-xl bg-dark-blue/40 hover:bg-dark-blue/60 transition-all duration-300 border border-white/5 hover:border-primary/30 min-w-[120px]"
+            className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 rounded-xl bg-dark-blue/40 hover:bg-dark-blue/60 transition-all duration-300 border border-white/5 hover:border-primary/30 min-w-[100px] sm:min-w-[120px]"
           >
-            <div className="w-6 h-6 relative">
+            <div className="w-5 h-5 sm:w-6 sm:h-6 relative">
               <Image
                 src={selectedToken.image}
                 alt={selectedToken.symbol}
@@ -105,7 +105,7 @@ export default function TokenSelect({
                 className="rounded-full object-cover"
               />
             </div>
-            <span className="font-medium">{selectedToken.symbol}</span>
+            <span className="text-sm sm:text-base font-medium">{selectedToken.symbol}</span>
             <span className="text-gray-400 ml-1">▼</span>
           </button>
           
@@ -114,7 +114,7 @@ export default function TokenSelect({
             placeholder="0.0"
             value={amount}
             onChange={(e) => onAmountChange(e.target.value)}
-            className="w-full bg-transparent text-right focus:outline-none text-xl font-medium"
+            className="w-full bg-transparent text-right focus:outline-none text-lg sm:text-xl font-medium"
           />
         </div>
 
@@ -133,8 +133,8 @@ export default function TokenSelect({
 
       {/* Token Selection Modal */}
       {isSelectOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-          <div className="bg-dark-blue/95 rounded-2xl w-full max-w-md p-4 border border-white/10 shadow-xl">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="bg-dark-blue/95 rounded-t-2xl sm:rounded-2xl w-full max-w-md p-4 border border-white/10 shadow-xl">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold">Select Token</h3>
               <button 

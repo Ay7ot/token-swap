@@ -53,7 +53,7 @@ export default function ConnectWallet() {
             <button
                 onClick={connect}
                 disabled={isConnecting}
-                className="px-4 py-2 rounded-xl bg-gradient-primary hover:shadow-glow transition-all duration-300 text-white font-semibold disabled:opacity-50 flex items-center gap-2"
+                className="text-xs md:text-base px-4 py-2 rounded-xl bg-gradient-primary hover:shadow-glow transition-all duration-300 text-white font-semibold disabled:opacity-50 flex items-center gap-2"
             >
                 {isConnecting ? (
                     <>
@@ -79,16 +79,16 @@ export default function ConnectWallet() {
         <div className="relative z-40" ref={menuRef}>
             <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="px-4 py-2 rounded-xl bg-dark-blue/40 hover:bg-dark-blue/60 transition-all duration-300 border border-white/5 hover:border-primary/30"
+                className="px-3 sm:px-4 py-2 rounded-xl bg-dark-blue/40 hover:bg-dark-blue/60 transition-all duration-300 border border-white/5 hover:border-primary/30"
             >
                 <div className="flex items-center gap-2">
                     <div className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
-                    <span>{shortenAddress(address!)}</span>
+                    <span className="text-sm sm:text-base">{shortenAddress(address!)}</span>
                 </div>
             </button>
 
             {isMenuOpen && (
-                <div className="absolute right-0 mt-2 w-72 rounded-xl bg-dark-blue/95 border border-white/10 shadow-xl backdrop-blur-xl p-4 space-y-4 z-50">
+                <div className="absolute right-0 mt-2 w-[280px] sm:w-72 rounded-xl bg-dark-blue/95 border border-white/10 shadow-xl backdrop-blur-xl p-3 sm:p-4 space-y-3 sm:space-y-4 z-50">
                     <div className="space-y-2">
                         <div className="text-sm text-gray-400">Account</div>
                         <div className="flex items-center justify-between">
