@@ -10,7 +10,7 @@ interface WalletContextType {
     isConnected: boolean;
     isConnecting: boolean;
     connect: () => Promise<void>;
-    disconnect: () => void;
+    disconnect: () => Promise<void>;
     provider: ethers.providers.Web3Provider | null;
 }
 
@@ -18,94 +18,93 @@ const WalletContext = createContext<WalletContextType>({} as WalletContextType);
 
 export function WalletProvider({ children }: { children: ReactNode }) {
     const [address, setAddress] = useState<string | null>(null);
-    const [balance, setBalance] = useState<string>('0');
+    const [balance, setBalance] = useState('0');
     const [chainId, setChainId] = useState<number | null>(null);
-    const [isConnected, setIsConnected] = useState(false);
     const [isConnecting, setIsConnecting] = useState(false);
     const [provider, setProvider] = useState<ethers.providers.Web3Provider | null>(null);
 
-    useEffect(() => {
-        // Check if wallet was previously connected
-        const checkConnection = async () => {
-            if (typeof window !== 'undefined' && window.ethereum?.selectedAddress) {
-                connect();
-            }
-        };
-        checkConnection();
-    }, []);
-
     const connect = async () => {
-        if (typeof window === 'undefined' || !window.ethereum) {
-            alert('Please install MetaMask or another Web3 wallet');
+        if (!window.ethereum) {
+            alert('Please install MetaMask!');
             return;
         }
 
         setIsConnecting(true);
+
         try {
-            const provider = new ethers.providers.Web3Provider(window.ethereum as any);
-            await provider.send("eth_requestAccounts", []);
-            const signer = provider.getSigner();
-            const address = await signer.getAddress();
-            const balance = await provider.getBalance(address);
-            const network = await provider.getNetwork();
+            // Force MetaMask to show the wallet selection screen
+            await window.ethereum.request({
+                method: 'wallet_requestPermissions',
+                params: [{ eth_accounts: {} }]
+            });
 
-            setProvider(provider);
-            setAddress(address);
-            setBalance(ethers.utils.formatEther(balance));
+            // After permission is granted, get the selected account
+            const accounts = await window.ethereum.request({
+                method: 'eth_requestAccounts'
+            });
+
+            const web3Provider = new ethers.providers.Web3Provider(window.ethereum);
+            const network = await web3Provider.getNetwork();
+            const account = accounts[0];
+            const accountBalance = await web3Provider.getBalance(account);
+
+            setProvider(web3Provider);
+            setAddress(account);
             setChainId(network.chainId);
-            setIsConnected(true);
-
-            // Setup event listeners
-            if (window.ethereum?.on) {
-                window.ethereum.on('accountsChanged', handleAccountsChanged);
-                window.ethereum.on('chainChanged', handleChainChanged);
-                window.ethereum.on('disconnect', handleDisconnect);
-            }
+            setBalance(ethers.utils.formatEther(accountBalance));
         } catch (error) {
-            console.error('Error connecting wallet:', error);
+            console.error('Connection error:', error);
         } finally {
             setIsConnecting(false);
         }
     };
 
-    const disconnect = () => {
+    const disconnect = async () => {
         setAddress(null);
         setBalance('0');
         setChainId(null);
-        setIsConnected(false);
         setProvider(null);
 
-        // Remove event listeners
-        if (window.ethereum?.removeListener) {
-            window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
-            window.ethereum.removeListener('chainChanged', handleChainChanged);
-            window.ethereum.removeListener('disconnect', handleDisconnect);
+        // Clear any cached permissions
+        if (window.ethereum && window.ethereum.request) {
+            try {
+                await window.ethereum.request({
+                    method: 'wallet_revokePermissions',
+                    params: [{ eth_accounts: {} }]
+                });
+            } catch (error) {
+                console.error('Error revoking permissions:', error);
+            }
         }
     };
 
-    const handleAccountsChanged = (accounts: string[]) => {
-        if (accounts.length === 0) {
-            disconnect();
-        } else {
-            setAddress(accounts[0]);
-            updateBalance(accounts[0]);
-        }
-    };
+    // Event listeners for account and chain changes
+    useEffect(() => {
+        if (!window.ethereum) return;
 
-    const handleChainChanged = (_chainId: string) => {
-        window.location.reload();
-    };
+        const handleAccountsChanged = (accounts: string[]) => {
+            if (accounts.length === 0) {
+                disconnect();
+            } else if (accounts[0] !== address) {
+                connect();
+            }
+        };
 
-    const handleDisconnect = () => {
-        disconnect();
-    };
+        const handleChainChanged = () => {
+            window.location.reload();
+        };
 
-    const updateBalance = async (address: string) => {
-        if (provider) {
-            const balance = await provider.getBalance(address);
-            setBalance(ethers.utils.formatEther(balance));
-        }
-    };
+        const ethereum = window.ethereum;
+        ethereum.on('accountsChanged', handleAccountsChanged);
+        ethereum.on('chainChanged', handleChainChanged);
+
+        return () => {
+            if (ethereum) {
+                ethereum.removeListener('accountsChanged', handleAccountsChanged);
+                ethereum.removeListener('chainChanged', handleChainChanged);
+            }
+        };
+    }, [address]);
 
     return (
         <WalletContext.Provider
@@ -113,11 +112,11 @@ export function WalletProvider({ children }: { children: ReactNode }) {
                 address,
                 balance,
                 chainId,
-                isConnected,
+                isConnected: !!address,
                 isConnecting,
                 connect,
                 disconnect,
-                provider,
+                provider
             }}
         >
             {children}
@@ -125,4 +124,6 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     );
 }
 
-export const useWallet = () => useContext(WalletContext);
+export function useWallet() {
+    return useContext(WalletContext);
+}

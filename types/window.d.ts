@@ -1,11 +1,12 @@
+interface EthereumProvider {
+    isMetaMask?: boolean;
+    request: (args: { method: string; params?: any[] }) => Promise<any>;
+    on: (eventName: string, handler: (...args: any[]) => void) => void;
+    removeListener: (eventName: string, handler: (...args: any[]) => void) => void;
+    selectedAddress?: string;
+    chainId?: string;
+}
+
 interface Window {
-    ethereum?: {
-        isMetaMask?: boolean;
-        request?: (...args: any[]) => Promise<any>;
-        on?: (...args: any[]) => void;
-        removeListener?: (...args: any[]) => void;
-        selectedAddress?: string;
-        chainId?: string;
-        // Add other ethereum provider properties as needed
-    };
+    ethereum?: EthereumProvider;
 }
